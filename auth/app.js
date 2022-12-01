@@ -60,4 +60,43 @@ app.post("/register", async (req, res) => {
   }
 });
 
+//
+app.post("/login ", async (req, res) => {
+  try {
+    // collect information from front end
+    const { email, password } = req.body;
+    // validate
+    if (!email && password) {
+      req.status(401).send("email and password is required ");
+    }
+    // check user in data base
+    const user = await User.findOne({ email });
+    // if user dose not exist
+    // match the passwork
+    if (user && (await bcrypt.compare(password, User.password))) {
+      // create a token an send
+      const token = jwt.sign({ id: user._id, email }, "shhhh", {
+        expiresIn: "2h",
+      }); // secret shoud be a variable
+      user.password = undefined;
+      user.token = token;
+
+      // create cookies
+      const options = {
+        expires: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000), // 3600000
+        httpOnly: true,
+      };
+      //  send response
+      res.status(200).cookie("tooken", token, options).json({
+        success: true,
+        token,
+        user,
+      });
+    }
+    res.sendStatus(400).send("email or password is incorrect ");
+  } catch (error) {
+    console.log(error);
+  }
+});
+
 //skiping the part of listening right now.
