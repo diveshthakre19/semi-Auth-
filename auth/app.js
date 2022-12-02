@@ -3,6 +3,7 @@ require("./config/database").connect(); //this is method we have created
 const express = require("express");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
+const cookieParser = require("cookie-parser");
 
 // import model - User
 const User = require("./model/user"); // this User has access to mongoose
@@ -97,6 +98,14 @@ app.post("/login ", async (req, res) => {
   } catch (error) {
     console.log(error);
   }
+});
+
+// i want to make a page dashboard  an duser should be able to access the dashboard
+app.get("/dashboard", (req, res) => {
+  // how to access users cookies in express
+  // cookie-parser
+  console.log(res.cookies);
+  const token = req.cookies;
 });
 
 //skiping the part of listening right now.
