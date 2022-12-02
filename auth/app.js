@@ -101,11 +101,26 @@ app.post("/login ", async (req, res) => {
 });
 
 // i want to make a page dashboard  an duser should be able to access the dashboard
+//veryfiy the cookie and then allow the user.
 app.get("/dashboard", (req, res) => {
   // how to access users cookies in express
   // cookie-parser
-  console.log(res.cookies);
-  const token = req.cookies;
+  console.log(req.cookies);
+  const token = req.cookies; //req.cookies.token if variable name is same
+  // what if there is no token
+  if (!token) {
+    return res.status(403).send("token is missing");
+  }
+  // verify token
+  try {
+    const decode = jwt.verify(token, "shhhhh");
+    console.log(decode);
+    req.user = decode;
+
+    // extract id from token and query the DB
+  } catch (error) {
+    console.log(error);
+  }
 });
 
 //skiping the part of listening right now.
