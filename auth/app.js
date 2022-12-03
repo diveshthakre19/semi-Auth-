@@ -1,3 +1,4 @@
+require("dotenv").config();
 // in order to start this app i want to start Database
 require("./config/database").connect(); //this is method we have created
 const express = require("express");
@@ -107,4 +108,9 @@ app.get("/dashboard", (req, auth, res) => {
   res.send("welcome to DashBoard");
 });
 
-//skiping the part of listening right now.
+// in this route user shoud get his profile data and get privilages according to his role.
+app.get("/profile", (req, auth, getRole, res) => {
+  //access to req.user = id, email
+  //based on id, query to DB and get all information of user - findOne({id})
+  //send a json response with all data
+});

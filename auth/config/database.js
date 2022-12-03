@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const MONGODB_URL = "theurlstring";
+const MONGODB_URL = process.env;
 // this is a method we have created exports.connect
 exports.connect = () => {
   mongoose
