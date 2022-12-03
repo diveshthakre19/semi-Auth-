@@ -4,13 +4,14 @@ const express = require("express");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const cookieParser = require("cookie-parser");
-
+// costom middleware
+const auth = require("./middleware/auth");
 // import model - User
 const User = require("./model/user"); // this User has access to mongoose
 const app = express();
 app.use(express.json()); // consider these as an syntax we will study this later
 app.use(express.urlencoded({ extended: true })); // from express docs
-
+app.use(cookieParser()); //
 app.get("/", (req, res) => {
   res.send("hello auth system");
 });
@@ -102,25 +103,8 @@ app.post("/login ", async (req, res) => {
 
 // i want to make a page dashboard  an duser should be able to access the dashboard
 //veryfiy the cookie and then allow the user.
-app.get("/dashboard", (req, res) => {
-  // how to access users cookies in express
-  // cookie-parser
-  console.log(req.cookies);
-  const token = req.cookies; //req.cookies.token if variable name is same
-  // what if there is no token
-  if (!token) {
-    return res.status(403).send("token is missing");
-  }
-  // verify token
-  try {
-    const decode = jwt.verify(token, "shhhhh");
-    console.log(decode);
-    req.user = decode;
-
-    // extract id from token and query the DB
-  } catch (error) {
-    console.log(error);
-  }
+app.get("/dashboard", (req, auth, res) => {
+  res.send("welcome to DashBoard");
 });
 
 //skiping the part of listening right now.
