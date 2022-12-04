@@ -104,7 +104,7 @@ app.post("/login ", async (req, res) => {
 
 // i want to make a page dashboard  an duser should be able to access the dashboard
 //veryfiy the cookie and then allow the user.
-app.get("/dashboard", (req, auth, res) => {
+app.get("/dashboard", auth, (req, res) => {
   res.send("welcome to DashBoard");
 });
 
@@ -114,3 +114,5 @@ app.get("/profile", (req, auth, getRole, res) => {
   //based on id, query to DB and get all information of user - findOne({id})
   //send a json response with all data
 });
+
+module.exports = app;
